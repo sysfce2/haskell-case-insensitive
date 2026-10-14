@@ -1,8 +1,4 @@
-{-# LANGUAGE CPP, NoImplicitPrelude #-}
-
-#if __GLASGOW_HASKELL__ >= 702
-{-# LANGUAGE Trustworthy #-}
-#endif
+{-# LANGUAGE NoImplicitPrelude, Trustworthy #-}
 
 -----------------------------------------------------------------------------
 -- |
@@ -27,8 +23,8 @@ module Data.CaseInsensitive ( CI
                             , mk
                             , original
                             , foldedCase
-                            , map
-                            , traverse
+                            , Data.CaseInsensitive.Internal.map
+                            , Data.CaseInsensitive.Internal.traverse
                             , FoldCase(foldCase)
                             ) where
 import Data.CaseInsensitive.Internal

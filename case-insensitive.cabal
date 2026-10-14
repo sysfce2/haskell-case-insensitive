@@ -1,8 +1,8 @@
+cabal-version: 3.0
 name:          case-insensitive
 version:       1.2.1.0
-cabal-version: >=1.8
 build-type:    Simple
-license:       BSD3
+license:       BSD-3-Clause
 license-file:  LICENSE
 copyright:     2011 Bas van Dijk
 author:        Bas van Dijk
@@ -17,13 +17,13 @@ description:   The module @Data.CaseInsensitive@ provides the 'CI' type
                etc.. Comparisons of values of the resulting type will be
                insensitive to cases.
 tested-with:
-  GHC==7.0.4,
-  GHC==7.2.2
-  GHC==7.4.2,
-  GHC==7.6.3,
-  GHC==7.8.4,
-  GHC==7.10.3,
-  GHC==8.0.1
+  GHC==9.2,
+  GHC==9.4,
+  GHC==9.6,
+  GHC==9.8,
+  GHC==9.10,
+  GHC==9.12,
+  GHC==9.14
 
 extra-source-files: README.markdown CHANGELOG pg2189.txt
 
@@ -33,13 +33,13 @@ source-repository head
 
 Library
   ghc-options: -Wall
-  build-depends: base       >= 3 && < 5
-               , bytestring >= 0.9
-               , text       >= 0.3
-               , deepseq    >= 1.1
-               , hashable   >= 1.0
-  if !impl(ghc >= 8.0)
-    build-depends: semigroups >= 0.18
+  build-depends: base             >= 4.11 && < 5
+               , bytestring       >= 0.11.3
+               , text             >= 0.3
+               , deepseq          >= 1.1
+               , hashable         >= 1.0
+  if impl(ghc)
+    build-depends: template-haskell >= 2.2
   exposed-modules: Data.CaseInsensitive, Data.CaseInsensitive.Unsafe
   other-modules: Data.CaseInsensitive.Internal
 
@@ -53,8 +53,9 @@ test-suite test-case-insensitive
                , bytestring           >= 0.9
                , text                 >= 0.3
                , HUnit                >= 1.2.2
-               , test-framework       >= 0.2.4
-               , test-framework-hunit >= 0.2.4
+               , tasty                ^>= 1.5
+               , tasty-hunit          ^>= 0.10
+               , template-haskell     >= 2.2
 
   ghc-options: -Wall
 

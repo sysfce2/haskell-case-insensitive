@@ -1,6 +1,8 @@
+{-# LANGUAGE TemplateHaskell #-}
 module Main ( main ) where
 
 import           Data.ByteString                    ( ByteString )
+import           Data.ByteString.Short              ( toShort )
 import qualified Data.ByteString.Char8      as BC8  ( pack, map )
 import qualified Data.ByteString.Lazy       as Lazy ( ByteString )
 import qualified Data.ByteString.Lazy.Char8 as BLC8 ( pack, map )
@@ -10,12 +12,12 @@ import           Data.Text                          ( Text )
 import qualified Data.Text                  as T    ( pack, toUpper )
 import qualified Data.Text.Lazy             as Lazy ( Text )
 import qualified Data.Text.Lazy             as TL   ( pack, toUpper )
-import           Test.Framework                     ( defaultMain, testGroup )
-import           Test.Framework.Providers.HUnit     ( testCase )
-import           Test.HUnit                         ( assertEqual )
+import           Test.Tasty
+import           Test.Tasty.HUnit
+import           Language.Haskell.TH.Syntax         ( lift )
 
 main :: IO ()
-main = defaultMain
+main = defaultMain $ testGroup "case-insensitive"
   [ testGroup "ASCII"
     [ testCase "String"          $ assertEqual "" (CI.mk                    asciiStr)
                                                   (CI.mk (     map toUpper  asciiStr))
@@ -23,6 +25,8 @@ main = defaultMain
                                                   (CI.mk ( BC8.map toUpper  asciiBs))
     , testCase "Lazy.ByteString" $ assertEqual "" (CI.mk                    asciiLBs)
                                                   (CI.mk (BLC8.map toUpper  asciiLBs))
+    , testCase "ShortByteString" $ assertEqual "" (CI.mk           (toShort asciiBs))
+                                                  (CI.mk (toShort (BC8.map toUpper asciiBs)))
     , testCase "Text"            $ assertEqual "" (CI.mk                    asciiTxt)
                                                   (CI.mk (       T.toUpper  asciiTxt))
     , testCase "Lazy.Text"       $ assertEqual "" (CI.mk                    asciiLTxt)
@@ -39,6 +43,10 @@ main = defaultMain
                                                   (CI.mk (       T.toUpper  iso_8859_1Txt))
     , testCase "Lazy.Text"       $ assertEqual "" (CI.mk                    iso_8859_1LTxt)
                                                   (CI.mk (      TL.toUpper  iso_8859_1LTxt))
+    ]
+  , testGroup "Lift Instance"
+    [ testCase "String"          $ assertEqual "" $(lift $ CI.mk "aBc")
+                                                  (CI.mk "abc")
     ]
   ]
 
